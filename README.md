@@ -2,7 +2,10 @@
 > [!NOTE]
 > This project currently does not have a name, name discussion have yet to happen.
 ## Team Members
-
+>Shelby Crosby - shelbs-prog
+>Tugba Agdas - tugbaagdas
+>Matthew Ingram - matthew-ingram
+>Xander Parker -
 ## Tech Stack
 
 ## Project Idea
