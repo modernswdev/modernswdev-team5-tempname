@@ -4,8 +4,8 @@
 ## Team Members
 >Shelby Crosby - shelbs-prog
 >Tugba Agdas - tugbaagdas
->Matthew Ingram - matthew-ingram
->Xander Parker -
+>Matthew Ingram - Matthew-Ingram
+>Xander Parker - Have not recieved handle from student
 ## Tech Stack
 
 ## Project Idea
