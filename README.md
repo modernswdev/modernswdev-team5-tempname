@@ -41,11 +41,9 @@ Only after approval will the feature be merged into the `main` branch.
 
 ### Communication & Meeting Cadence
 
-### Communication & Meeting Cadence
-
 We will use Slack as our main communication platform and maintain a dedicated channel for Team 5. All updates, questions, and important information will be shared there to keep everyone informed.
 
-Our team will meet once per week, either via Slack or Zoom. During these meetings, we will review what each member worked on and discuss overall progress. If necessary, we may schedule additional meetings, but at minimum we will meet weekly.
+Our team will meet once per week via Slack or Zoom. Our weekly meeting time is **11:30 AM on Monday**. During these meetings, we will review what each member worked on and discuss overall progress. If necessary, we may schedule additional meetings, but we will meet at least once per week.
 
 ### Branching Strategy
 To avoid merge conflicts, we will use a feature branch strategy.
