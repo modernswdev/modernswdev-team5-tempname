@@ -5,7 +5,9 @@
 - Tugba Agdas - tugbaagdas
 - Matthew Ingram - Matthew-Ingram
 - Xander Parker - Have not recieved handle from student
-The team member currently acting as the **Scrum Master** is: Matthew Ingram
+
+The different **Scrum Masters** throughout the sprints so far are as follows:
+- Sprint 1 - Matthew Ingram
 ## Tech Stack
 - Language: C++
 - IDE/Tools: Visual Studio (or VS Code)
