@@ -66,4 +66,48 @@ After completing a feature, a Pull Request will be created to merge it into `mai
 - At least one team member must review and approve the PR.
 - Feedback must be addressed before merging.
 
+## User Personas
 
+### User (Employee)
+
+**Description:**
+An employee who submits service requests when they need technical or maintenance help.
+
+**Goals:**
+- Submit a service request
+- Track the status of their request
+- Know when their issue has been resolved
+
+---
+
+### 2. Admin/Staff (IT or Maintenance Technician)
+
+**Description:**
+A staff member responsible for reviewing, managing, and resolving submitted service requests
+
+**Goals:**
+- View all submitted service requests
+- Prioritize urgent issues
+- Update request status
+- Close completed requests
+
+---
+
+## Key Features
+
+### 1. Create a service request (ticket)
+- Users can create a new request with a title and description
+- Requests include a priority level (Low / Medium / High)
+  
+### 2. View request list
+- Admin/Staff can view a list of all service requests
+- Each request shows basic information like ID, title, status, and date created
+  
+### 3. Update request status
+- Admin/Staff can update service request status (Open, In Progress, Resolved/Closed)
+
+### 4. Sorting/Filtering
+-Admin/Staff can sort or filter requests by status and/or priority to find request items quickly
+
+### 5. View request details
+-Admin/Staff can open a request to see full details including description, priority, and timestamps
