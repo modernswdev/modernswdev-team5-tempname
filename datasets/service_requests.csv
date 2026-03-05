@@ -1,0 +1,26 @@
+request_id,title,description,status,priority,created_date,updated_date,created_by_user_id,assigned_to_user_id,comment
+1001,Email not syncing,Outlook not receiving new messages,Open,High,2026-02-18,2026-02-18,1,6,Requested screenshots of error message
+1002,Printer jam,Printer keeps jamming on tray 2,In Progress,Medium,2026-02-18,2026-02-19,2,6,Technician scheduled to check tray rollers
+1003,WiFi drops,WiFi disconnects every 10 minutes,Open,High,2026-02-18,2026-02-18,3,10,Asked user for location and device type
+1004,Install VS Code,Need VS Code installed on workstation,Resolved,Low,2026-02-17,2026-02-18,4,7,Installed and verified app opens successfully
+1005,Password reset,Locked out after too many attempts,Closed,Medium,2026-02-16,2026-02-16,5,7,Password reset completed and confirmed
+1006,Monitor flicker,External monitor flickers intermittently,In Progress,Low,2026-02-19,2026-02-20,8,6,Replaced HDMI cable; monitoring results
+1007,Projector no power,Projector will not turn on,Open,High,2026-02-20,2026-02-20,9,10,Need access to conference room for troubleshooting
+1008,Slow startup,Computer takes over 10 minutes to boot,Open,Medium,2026-02-20,2026-02-20,1,6,Recommended running updates and malware scan
+1009,New account request,Need account for new employee,Resolved,Medium,2026-02-15,2026-02-16,2,7,Account created and credentials provided
+1010,Keyboard issues,Keys are sticking and missing,Closed,Low,2026-02-14,2026-02-15,3,10,Keyboard replaced from spare inventory
+1011,VPN auth error,VPN fails with authentication error,Open,High,2026-02-21,2026-02-21,4,7,User advised to re-enroll MFA device
+1012,Software update,Need latest browser update installed,Resolved,Low,2026-02-21,2026-02-22,5,6,Updated browser and restarted system
+1013,Website blocked,Required site blocked by filter,In Progress,Medium,2026-02-22,2026-02-23,8,10,Submitted allowlist request to security admin
+1014,Mouse not detected,USB mouse not recognized,Closed,Low,2026-02-12,2026-02-12,9,6,Tried different port; replaced mouse
+1015,Scanner save issue,Scanner does not save PDF output,Open,Medium,2026-02-22,2026-02-22,1,10,Asked for model number and scan settings
+1016,Shared drive access,Need access to shared department drive,Open,High,2026-02-22,2026-02-22,2,7,Waiting on manager approval for access
+1017,No power,Computer will not power on,In Progress,High,2026-02-23,2026-02-23,3,6,Checked outlet and power cable; next test PSU
+1018,Update status check,Confirm request completed and close,Closed,Medium,2026-02-11,2026-02-11,4,7,User confirmed fix; ticket closed
+1019,Install printer driver,Need driver for new printer model,Resolved,Low,2026-02-10,2026-02-10,5,10,Driver installed and test page printed
+1020,Replace ethernet cable,Cable damaged near connector,Closed,Low,2026-02-09,2026-02-10,8,6,Replaced cable and verified link lights
+1021,Setup two factor,Need help enabling two factor login,Open,Medium,2026-02-23,2026-02-23,9,,Sent instructions for enabling 2FA
+1022,Signup page error,Account creation fails on submit,In Progress,High,2026-02-23,2026-02-24,1,7,Reproduced issue; checking validation rules
+1023,Ticket search issue,Search returns no results for tickets,Open,Medium,2026-02-24,2026-02-24,2,10,Need logs and example search query
+1024,File upload fails,Attachment upload times out,Resolved,Medium,2026-02-24,2026-02-24,3,6,Increased timeout and confirmed upload works
+1025,Close old request,Request completed and needs closing,Closed,Low,2026-02-08,2026-02-08,4,,Closed per user request; no further action
