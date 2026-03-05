@@ -1,0 +1,11 @@
+user_id,first_name,last_name,email,role,created_date
+1,Alex,Parker,alex.parker@test.local,user,2026-02-10
+2,Jordan,Lee,jordan.lee@test.local,user,2026-02-10
+3,Casey,Nguyen,casey.nguyen@test.local,user,2026-02-11
+4,Taylor,Reed,taylor.reed@test.local,user,2026-02-12
+5,Morgan,Kim,morgan.kim@test.local,user,2026-02-13
+6,Riley,Shah,riley.shah@test.local,staff,2026-02-10
+7,Avery,Wright,avery.wright@test.local,admin,2026-02-10
+8,Jamie,Patel,jamie.patel@test.local,user,2026-02-14
+9,Sam,Rivera,sam.rivera@test.local,user,2026-02-15
+10,Chris,Johnson,chris.johnson@test.local,staff,2026-02-16
