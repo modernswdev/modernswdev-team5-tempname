@@ -9,6 +9,8 @@
 
 The different **Scrum Masters** throughout the sprints so far are as follows:
 - Sprint 1 - Matthew Ingram
+- Sprint 2 - Shelby Crosby
+  
 ## Tech Stack
 - Language: C++
 - IDE/Tools: Visual Studio (or VS Code)
