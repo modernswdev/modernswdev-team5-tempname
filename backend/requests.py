@@ -49,16 +49,22 @@ def update_status(request_id, new_status):
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute(
-        "UPDATE requests SET status = ? WHERE id = ?",
-        (new_status, request_id)
-    )
-
-    conn.commit()
-    conn.close()
-
-    print("Status updated successfully")
-
+    # I have changed this to have custom error handling, for some reason pytest cannot
+    # understand this function very well. - Matthew Ingram
+    try:
+        cursor.execute(
+            "UPDATE requests SET status = ? WHERE id = ?",
+            (new_status, request_id)
+        )
+    except:
+        conn.close()
+        return False
+    else:
+        conn.commit()
+        conn.close()
+        print("Status updated successfully")
+        return True
+    # End of my changes here. - Matthew Ingram
 
 def sort_by_priority():
     conn = get_connection()
@@ -97,16 +103,21 @@ def filter_by_status(status_value):
         print(row)
 
     conn.close()
+    return len(rows) # Added for unit testing. - Matthew Ingram
 
-# Prepare database - Matthew Ingram
-connection = get_connection()
-with open("database/schema.sql", "r") as schema:
-    setup_string = schema.read()
-cursor = connection.cursor()
-cursor.executescript(setup_string)
-connection.commit()
-connection.close()
-# End of my addition - Matthew Ingram
+# Prepare database. - Matthew Ingram
+def prepare_database():
+    connection = get_connection()
+    with open("database/schema.sql", "r") as schema:
+        setup_string = schema.read()
+    cursor = connection.cursor()
+    cursor.executescript(setup_string)
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+prepare_database()
+# End of my addition. - Matthew Ingram
 
 if __name__ == "__main__":
     print("1. View requests")
