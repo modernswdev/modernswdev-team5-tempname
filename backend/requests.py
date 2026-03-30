@@ -30,6 +30,7 @@ def validate_credentials(email, password):
 
 def view_requests(requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 1:
+        print("TODO")
         # TODO: Add user table and dataset to properly test this stuff, then uncomment.
         # return
 
@@ -54,6 +55,7 @@ def view_requests(requester_email, requester_password):
 
 def create_request(title, description, priority, requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 1:
+        print("TODO")
         # TODO: Add user table and dataset to properly test this stuff, then uncomment.
         # return
 
@@ -76,6 +78,7 @@ def create_request(title, description, priority, requester_email, requester_pass
 
 def update_status(request_id, new_status, requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 2:
+        print("TODO")
         # TODO: Add user table and dataset to properly test this stuff, then uncomment.
         # return False
 
@@ -101,6 +104,7 @@ def update_status(request_id, new_status, requester_email, requester_password):
 
 def sort_by_priority(requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 1:
+        print("TODO")
         # TODO: Add user table and dataset to properly test this stuff, then uncomment.
         # return
 
@@ -124,6 +128,7 @@ def sort_by_priority(requester_email, requester_password):
 
 def filter_by_status(status_value, requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 1:
+        print("TODO")
         # TODO: Add user table and dataset to properly test this stuff, then uncomment.
         # return 0
 
