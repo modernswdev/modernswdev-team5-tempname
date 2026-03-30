@@ -6,8 +6,32 @@ DB_PATH = "database/service_requests.db"
 def get_connection():
     return sqlite3.connect(DB_PATH)
 
+def validate_credentials(email, password):
+    connection = get_connection()
+    cursor = connection.cursor()
 
-def view_requests():
+    result = cursor.execute(
+        """
+        SELECT UserRole
+        FROM Users
+        WHERE Users.UserEmail = ? AND Users.UserPassword = ?
+        """,
+        (email, password)
+    )
+
+    fetched = result.fetchone()
+
+    connection.close()
+
+    if fetched is None:
+        return 0
+    else:
+        return fetched[0]
+
+def view_requests(requester_email, requester_password):
+    if validate_credentials(requester_email, requester_password) < 1:
+        return
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -27,7 +51,10 @@ def view_requests():
     conn.close()
 
 
-def create_request(title, description, priority):
+def create_request(title, description, priority, requester_email, requester_password):
+    if validate_credentials(requester_email, requester_password) < 1:
+        return
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -45,7 +72,10 @@ def create_request(title, description, priority):
     print("Request created successfully")
 
 
-def update_status(request_id, new_status):
+def update_status(request_id, new_status, requester_email, requester_password):
+    if validate_credentials(requester_email, requester_password) < 2:
+        return False
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -66,7 +96,10 @@ def update_status(request_id, new_status):
         return True
     # End of my changes here. - Matthew Ingram
 
-def sort_by_priority():
+def sort_by_priority(requester_email, requester_password):
+    if validate_credentials(requester_email, requester_password) < 1:
+        return
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -85,7 +118,10 @@ def sort_by_priority():
     conn.close()
 
 
-def filter_by_status(status_value):
+def filter_by_status(status_value, requester_email, requester_password):
+    if validate_credentials(requester_email, requester_password) < 1:
+        return 0
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -120,11 +156,13 @@ prepare_database()
 # End of my addition. - Matthew Ingram
 
 if __name__ == "__main__":
+    email, password = input("Please input your user email, followed by your user password: ").split()
+
     print("1. View requests")
-    view_requests()
+    view_requests(email, password)
 
     print("\n2. Sort by priority")
-    sort_by_priority()
+    sort_by_priority(email, password)
 
     print("\n3. Filter by status = In Progress")
-    filter_by_status("In Progress")
+    filter_by_status("In Progress", email, password)
