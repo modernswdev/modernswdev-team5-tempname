@@ -30,7 +30,8 @@ def validate_credentials(email, password):
 
 def view_requests(requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 1:
-        return
+        # TODO: Add user table and dataset to properly test this stuff, then uncomment.
+        # return
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -53,7 +54,8 @@ def view_requests(requester_email, requester_password):
 
 def create_request(title, description, priority, requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 1:
-        return
+        # TODO: Add user table and dataset to properly test this stuff, then uncomment.
+        # return
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -74,7 +76,8 @@ def create_request(title, description, priority, requester_email, requester_pass
 
 def update_status(request_id, new_status, requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 2:
-        return False
+        # TODO: Add user table and dataset to properly test this stuff, then uncomment.
+        # return False
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -98,7 +101,8 @@ def update_status(request_id, new_status, requester_email, requester_password):
 
 def sort_by_priority(requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 1:
-        return
+        # TODO: Add user table and dataset to properly test this stuff, then uncomment.
+        # return
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -120,7 +124,8 @@ def sort_by_priority(requester_email, requester_password):
 
 def filter_by_status(status_value, requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 1:
-        return 0
+        # TODO: Add user table and dataset to properly test this stuff, then uncomment.
+        # return 0
 
     conn = get_connection()
     cursor = conn.cursor()
