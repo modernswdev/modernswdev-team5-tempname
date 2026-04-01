@@ -102,12 +102,58 @@ def update_status(request_id, new_status, requester_email, requester_password):
         return True
     # End of my changes here. - Matthew Ingram
 
+def view_request_details(request_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT id, title, description, priority, status, created_at, updated_at
+        FROM requests
+        WHERE id = ?
+        """,
+        (request_id,)
+    )
+
+    row = cursor.fetchone()
+    conn.close()
+
+    if row:
+        print("\nRequest Details")
+        print("==========================")
+        print(f"ID          : {row[0]}")
+        print(f"Title       : {row[1]}")
+        print(f"Description : {row[2]}")
+        print(f"Priority    : {row[3]}")
+        print(f"Status      : {row[4]}")
+        print(f"Created At  : {row[5]}")
+        print(f"Updated At  : {row[6]}")
+        print("==========================\n")
+    else:
+        print(f"\nNo request found with ID {request_id}.\n")
+
+
+def open_request_details(requester_email, requester_password):
+    if validate_credentials(requester_email, requester_password) < 2:
+        print("TODO")
+        # TODO: Add user table and dataset to properly test this stuff, then uncomment.
+        # return
+        
+    request_id = input("Enter request ID to view details: ")
+
+    try:
+        request_id = int(request_id)
+        view_request_details(request_id)
+    except ValueError:
+        print("Invalid ID. Please enter a number.")
+
+
 def sort_by_priority(requester_email, requester_password):
     if validate_credentials(requester_email, requester_password) < 1:
         print("TODO")
         # TODO: Add user table and dataset to properly test this stuff, then uncomment.
         # return
-
+        
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -149,7 +195,8 @@ def filter_by_status(status_value, requester_email, requester_password):
         print(row)
 
     conn.close()
-    return len(rows) # Added for unit testing. - Matthew Ingram
+    return len(rows)  # Added for unit testing. - Matthew Ingram
+
 
 # Prepare database. - Matthew Ingram
 def prepare_database():
@@ -161,6 +208,7 @@ def prepare_database():
     connection.commit()
     cursor.close()
     connection.close()
+
 
 prepare_database()
 # End of my addition. - Matthew Ingram
@@ -176,3 +224,6 @@ if __name__ == "__main__":
 
     print("\n3. Filter by status = In Progress")
     filter_by_status("In Progress", email, password)
+    
+    print("\n4. Open request details")
+    open_request_details(email, password)
