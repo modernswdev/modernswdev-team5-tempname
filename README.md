@@ -10,6 +10,7 @@
 The different **Scrum Masters** throughout the sprints so far are as follows:
 - Sprint 1 - Matthew Ingram
 - Sprint 2 - Shelby Crosby
+- Sprint 3 - Khangai Altangerel
   
 ## Tech Stack
 - Language: C++
