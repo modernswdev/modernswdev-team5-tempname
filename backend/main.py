@@ -52,3 +52,12 @@ def get_request(request_id: str):
         if request["id"] == request_id:
             return request
     raise HTTPException(status_code=404, detail="Request not found")
+
+@app.put("/requests/{request_id}/status")
+def update_request_status(request_id: str, new_status: str):
+    for request in requests:
+        if request["id"] == request_id:
+            request["status"] = new_status
+            return {"message": "Status updated successfully", "request": request}
+    
+    raise HTTPException(status_code=404, detail="Request not found")
