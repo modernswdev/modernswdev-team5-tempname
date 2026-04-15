@@ -5,10 +5,7 @@ DB_PATH = "database/service_requests.db"
 
 
 def get_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
-
+    return sqlite3.connect(DB_PATH)
 
 def validate_credentials(email, password):
     connection = get_connection()
@@ -356,28 +353,44 @@ def filter_by_status(status_value, requester_email=None, requester_password=None
 
     rows = cursor.fetchall()
     conn.close()
+    return len(rows)  # Added for unit testing. - Matthew Ingram
 
-    return [row_to_request_dict(row) for row in rows]
 
+def status_int_to_str(status_int):
+    if status_int == 0:
+        return "Open"
+    elif status_int == 1:
+        return "In Progress"
+    elif status_int == 2:
+        return "Resolved"
 
+def role_int_to_str(role_int):
+    if role_int == 0:
+        return "No Login"
+    elif role_int == 1:
+        return "User"
+    elif role_int == 2:
+        return "Staff"
+    elif role_int == 3:
+        return "Admin"
+
+# Prepare database. - Matthew Ingram
 def prepare_database():
     connection = get_connection()
     with open("database/database_tables.sql", "r") as schema:
         setup_string = schema.read()
-
     cursor = connection.cursor()
     cursor.executescript(setup_string)
     connection.commit()
     cursor.close()
     connection.close()
 
-
+# Prepare both datasets. - Matthew Ingram
 def read_datasets():
     connection = get_connection()
     cursor = connection.cursor()
-
-    with open("datasets/service_requests.csv", newline="\n") as service_requests_file:
-        service_requests = csv.reader(service_requests_file, delimiter=",", quotechar="|")
+    with open("datasets/service_requests.csv", newline = "\n") as service_requests_file:
+        service_requests = csv.reader(service_requests_file, delimiter = ",", quotechar = "|")
         next(service_requests)
 
         for row in service_requests:
@@ -396,36 +409,27 @@ def read_datasets():
                 priority_converted = 5.0
             elif row[4] == "High":
                 priority_converted = 7.5
-
             cursor.execute(
                 """
-                INSERT OR IGNORE INTO Requests
-                (RequestID, RequestTitle, RequestBody, RequestStatus, RequestPriority, RequestCreatorID, RequestCreateDate, RequestModifyDate)
+                INSERT INTO Requests (RequestID, RequestTitle, RequestBody, RequestStatus, RequestPriority, RequestCreatorID, RequestCreateDate, RequestModifyDate)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
-                (
-                    int(row[0]),
-                    row[1],
-                    row[2],
-                    status_converted,
-                    priority_converted,
-                    int(row[7]),
-                    row[5],
-                    row[6],
-                ),
+                (int(row[0]), row[1], row[2], status_converted, priority_converted, int(row[7]), row[5], row[6])
             )
+            connection.commit()
 
-            if row[8] != "":
+            if (row[8] != ""):
                 cursor.execute(
                     """
-                    INSERT OR IGNORE INTO Assignees (AssigneeRequestID, AssigneeHandlerID)
+                    INSERT INTO Assignees (AssigneeRequestID, AssigneeHandlerID)
                     VALUES (?, ?)
                     """,
-                    (int(row[0]), int(row[8])),
+                    (int(row[0]), int(row[8]))
                 )
+                connection.commit()
 
-    with open("datasets/users.csv", newline="\n") as users_file:
-        users = csv.reader(users_file, delimiter=",", quotechar="|")
+    with open("datasets/users.csv", newline = "\n") as users_file:
+        users = csv.reader(users_file, delimiter = ",", quotechar = "|")
         next(users)
 
         for row in users:
@@ -436,28 +440,21 @@ def read_datasets():
                 role_converted = 2
             elif row[4] == "admin":
                 role_converted = 3
-
             cursor.execute(
                 """
-                INSERT OR IGNORE INTO Users
-                (UserID, UserFirstName, UserLastName, UserEmail, UserPassword, UserRole, UserCreateDate)
+                INSERT INTO Users (UserID, UserFirstName, UserLastName, UserEmail, UserPassword, UserRole, UserCreateDate)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
-                (
-                    int(row[0]),
-                    row[1],
-                    row[2],
-                    row[3],
-                    "password" + str(row[0]),
-                    role_converted,
-                    row[5],
-                ),
+                (int(row[0]), row[1], row[2], row[3], "password" + str(row[0]), role_converted, row[5])
             )
-
-    connection.commit()
+            connection.commit()
     cursor.close()
     connection.close()
 
+
+prepare_database()
+read_datasets()
+# End of my addition. - Matthew Ingram
 
 if __name__ == "__main__":
     prepare_database()
