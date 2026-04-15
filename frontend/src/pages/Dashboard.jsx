@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Card from "../components/Card.jsx"
 import Navbar from "../components/Navbar.jsx"
 import dotsIcon from "../assets/dots.svg"
@@ -64,6 +64,7 @@ export default function Dashboard() {
   const [requests, setRequests] = useState([])
   const [query, setQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("All")
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetch("http://localhost:8000/requests")
@@ -168,9 +169,18 @@ export default function Dashboard() {
     <Card>
       <Navbar />
       <div style={{padding: "2rem 2.5rem 2.5rem", backgroundColor: colors.lgBackground}}>
-        <div>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
           <h2 style={{fontSize: "1.6rem", fontWeight: 700, color: colors.textMain}}>Dashboard</h2>
+          <Link to="/create" style={{
+            backgroundColor: colors.primary,
+            color: "white",
+            padding: "0.5rem 1rem",
+            borderRadius: "0.5rem",
+            fontSize: "0.9rem",}}>
+            Create Request
+          </Link>
         </div>
+
         <div style={{ display: "grid", gap: "1.5rem" }}>
           {status_order.map((status) => {
             const rows = grouped[status]
@@ -201,13 +211,23 @@ export default function Dashboard() {
                       {rows.map((request) => {
                         const priority = normalizePriority(request.priority)
                         return (
-                          <tr key={request.id}>
+                          <tr key={request.id} onClick={(event) => {
+                              if (event.target.closest("a")) 
+                                return
+                              navigate(`/request/${request.id}`)
+                            }}
+                            style={{cursor: "pointer"}}
+                          >
                             <td style={{...bodyCellStyle, color: colors.textMuted}}>
                               <Link style={{color: colors.textMain, fontWeight: 600}} to={`/request/${request.id}`}>
                                 {request.id}
                               </Link>
                             </td>
-                            <td style={bodyCellStyle}> {request.title} </td>
+                            <td style={bodyCellStyle}>
+                              <Link style={{color: colors.textMain, fontWeight: 600}} to={`/request/${request.id}`}>
+                                {request.title}
+                              </Link>
+                            </td>
                             <td style={mutedCellStyle}> {request.user ?? "--"} </td>
                             <td style={mutedCellStyle}> {request.description ?? "--"} </td>
                             <td style={mutedCellStyle}> {request.created_at ?? "--"} </td>
