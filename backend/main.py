@@ -1,5 +1,15 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, EmailStr
+
+from backend.requests import (
+    prepare_database,
+    read_datasets,
+    view_requests,
+    view_request_details,
+    create_request as db_create_request,
+    update_status as db_update_status,
+)
 
 app = FastAPI()
 app.add_middleware(
@@ -9,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#hardcoded list for now.
+#hardcoded loin for MVP
 requests = [
     {
         "id": "1",
@@ -40,24 +50,113 @@ requests = [
     }
 ]
 
-#endpoint to get all requests
+# hardcoded users 
+users = [
+    {
+        "id": "1",
+        "first_name": "Eliza",
+        "last_name": "Morgan",
+        "email": "Testuser@gmail.com",
+        "password": "test123",
+        "role": "User",
+    }
+]
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+class RegisterUser(BaseModel):
+    first_name: str
+    last_name: str
+    email: EmailStr
+    password: str
+
+class createRequestBody(BaseModel):
+    title: str
+    description: str
+    priority: str
+
+class updateStatusBody(BaseModel):
+    new_status: str
+
+@app.on_event("startup")
+def startup_event():
+    prepare_database()
+    read_datasets()
+
+@app.get("/")
+def home():
+    return {"message": "Welcome to the Service Request Tracker API!"}
+
+@app.post("/login")
+def login(request: LoginRequest):
+    for user in users:
+        if user["email"].lower() == request.email.lower() and user["password"] == request.password:
+            return {
+                "message": "Login successful",
+                "user": {
+                    "user_id": user["id"],
+                    "email": user["email"],
+                    "role": user["role"],
+                    "first_name": user["first_name"],
+                    "last_name": user["last_name"],
+                },
+            }
+    raise HTTPException(status_code=401, detail="Invalid email or password")
+
+@app.post("/register", status_code=status.HTTP_201_CREATED)
+def register_user(user: RegisterUser):
+    for existing_user in users:
+        if existing_user["email"] == user.email:
+            raise HTTPException(status_code=400, detail="Email already registered")
+    
+    new_user = {
+        "id": str(len(users) + 1),
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+        "password": user.password, # In a real application, never store plain passwords!
+        "role": "User",  # Default role for new users
+    }
+    users.append(new_user)
+    return {
+        "message": "User registered successfully",
+        "user": {
+             "user_id": new_user["id"], 
+             "email": new_user["email"], 
+             "role": new_user["role"], 
+             "first_name": new_user["first_name"], 
+             "last_name": new_user["last_name"],
+        },
+    }
+
 @app.get("/requests")
 def get_requests():
-    return requests
+    return view_requests()
 
-#endpoint for specific request
 @app.get("/requests/{request_id}")
-def get_request(request_id: str):
-    for request in requests:
-        if request["id"] == request_id:
-            return request
-    raise HTTPException(status_code=404, detail="Request not found")
+def get_request(request_id: int):
+    request = view_request_details(request_id)
+    if request is None:
+        raise HTTPException(status_code=404, detail="Request not found")
+    return request
+
+@app.post("/requests", status_code=status.HTTP_201_CREATED)
+def create_request(request: createRequestBody):
+    created = db_create_request(request.title, request.description, request.priority)
+    if created is None:
+        raise HTTPException(status_code=400, detail="Failed to create request")
+    return created
 
 @app.put("/requests/{request_id}/status")
-def update_request_status(request_id: str, new_status: str):
-    for request in requests:
-        if request["id"] == request_id:
-            request["status"] = new_status
-            return {"message": "Status updated successfully", "request": request}
-    
-    raise HTTPException(status_code=404, detail="Request not found")
+def update_request_status(request_id: int, body: updateStatusBody):
+    updated = db_update_status(request_id, body.new_status)
+    if updated is None:
+        raise HTTPException(status_code=404, detail="Request not found")
+    return {
+        "message": "Status updated successfully",
+        "request": updated
+    }
+
+

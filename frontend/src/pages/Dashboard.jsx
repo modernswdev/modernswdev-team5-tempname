@@ -168,8 +168,31 @@ export default function Dashboard() {
     <Card>
       <Navbar />
       <div style={{padding: "2rem 2.5rem 2.5rem", backgroundColor: colors.lgBackground}}>
-        <div>
-          <h2 style={{fontSize: "1.6rem", fontWeight: 700, color: colors.textMain}}>Dashboard</h2>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <h2 style={{ fontSize: "1.6rem", fontWeight: 700, color: colors.textMain }}>
+            Dashboard
+          </h2>
+
+          <Link
+            to="/create"
+            style={{
+              padding: "0.6rem 1.2rem",
+              borderRadius: "999px",
+              textDecoration: "none",
+              backgroundColor: colors.primary,
+              color: colors.surface,
+              fontWeight: 600,
+            }}
+          >
+            + Create Request
+          </Link>
         </div>
         <div style={{ display: "grid", gap: "1.5rem" }}>
           {status_order.map((status) => {

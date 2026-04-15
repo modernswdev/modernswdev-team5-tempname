@@ -18,6 +18,9 @@ public:
     void close();
     bool isOpen() const;
 
+    bool emailExists(const std::string& email);
+    bool createUser(const std::string& firstName, const std::string& lastName, const std::string& email, const std::string& password);
+
 };
 
 #endif 
