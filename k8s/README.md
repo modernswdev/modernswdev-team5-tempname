@@ -8,7 +8,7 @@
 ## Either run the commands in the "Deploy" section, or the "Ingress" section:
 ### Deploy:
 - kubectl -n service-request-tracker-local rollout status deploy/web
-- kubectl -n dstrimble-local port-forward svc/web 5173:5173
+- kubectl -n service-request-tracker-local port-forward svc/web 5173:5173
 ### Ingress:
 - kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
 - kubectl -n ingress-nginx wait --for=condition=ready pod -l app.kubernetes.io/component=controller --timeout=180s
