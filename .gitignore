@@ -42,3 +42,5 @@
 
 # Database files
 database/*.db 
+__pycache__/
+*.pyc
