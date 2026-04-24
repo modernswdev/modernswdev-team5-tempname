@@ -1,8 +1,16 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from datetime import datetime
-from backend.requests import validate_credentials, role_int_to_str
+from backend.setup import initialize_database_if_needed
+from backend.requests import (
+    validate_credentials,
+    role_int_to_str,
+    view_requests,
+    view_request_details,
+    create_request as create_request_db,
+    update_status,
+    status_str_to_int,
+)
 
 app = FastAPI()
 app.add_middleware(
@@ -20,37 +28,11 @@ class RequestCreate(BaseModel):
 class LoginRequest(BaseModel):
     email: str
     password: str
+    
+class UpdateStatusBody(BaseModel):
+    new_status: str
 
-#hardcoded list for now.
-requests = [
-    {
-        "id": "1",
-        "title": "Reset MFA on account",
-        "user": "Eliza Morgan",
-        "description": " ",
-        "created_at": "12/03/2025",
-        "priority": "High",
-        "status": "Open",
-    },
-    {
-        "id": "2",
-        "title": "Software Access Request",
-        "user": "Mike Chang",
-        "description": " ",
-        "created_at": "01/21/2026",
-        "priority": "Low",
-        "status": "In Progress",
-    },
-    {
-        "id": "3",
-        "title": "Account lockout",
-        "user": "John Smith",
-        "description": " ",
-        "created_at": "03/12/2026",
-        "priority": "Medium",
-        "status": "Open",
-    }
-]
+initialize_database_if_needed()
 
 @app.post("/login")
 def login(login_data: LoginRequest):
@@ -71,40 +53,38 @@ def login(login_data: LoginRequest):
 #endpoint to get all requests
 @app.get("/requests")
 def get_requests():
-    return requests
+    return view_requests()
 
 #endpoint for specific request
 @app.get("/requests/{request_id}")
 def get_request(request_id: str):
-    for request in requests:
-        if request["id"] == request_id:
-            return request
+    request = view_request_details(request_id)
+    if request is not None:
+        return request
     raise HTTPException(status_code=404, detail="Request not found")
 
 @app.post("/requests")
 def create_request(new_request: RequestCreate):
-    request_id = str(len(requests) + 1)
-
-    request_data = {
-        "id": request_id,
-        "title": new_request.title,
-        "user": "Current User",
-        "description": new_request.description,
-        "created_at": datetime.now().strftime("%m/%d/%Y"),
-        "priority": new_request.priority,
-        "status": "Open",
-    }
-
-    requests.append(request_data)
+    request_data = create_request_db(
+        new_request.title,
+        new_request.description,
+        new_request.priority,
+    )
     return {"message": "Request created successfully", "request": request_data}
 
 @app.put("/requests/{request_id}/status")
-def update_request_status(request_id: str, new_status: str):
-    for request in requests:
-        if request["id"] == request_id:
-            request["status"] = new_status
-            return {"message": "Status updated successfully", "request": request}
-    
-    raise HTTPException(status_code=404, detail="Request not found")
+def update_request_status(request_id: str, body: UpdateStatusBody):
+    if status_str_to_int(body.new_status) is None:
+        raise HTTPException(status_code=400, detail="Invalid status value")
+
+    updated = update_status(request_id, body.new_status)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Request not found")
+
+    request = view_request_details(request_id)
+    if request is None:
+        raise HTTPException(status_code=404, detail="Request not found")
+
+    return {"message": "Status updated successfully", "request": request}
 
 

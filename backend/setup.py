@@ -2,7 +2,7 @@ import os
 import sqlite3
 import csv
 
-DB_PATH = "database/service_requests.db"
+DB_PATH = os.environ.get("DATABASE_PATH", "database/service_requests.db")
 
 
 def get_connection():
@@ -105,8 +105,17 @@ def database_ready():
     )
     has_requests = cursor.fetchone() is not None
 
+    users_count = 0
+    requests_count = 0
+    if has_users:
+        cursor.execute("SELECT COUNT(*) FROM Users")
+        users_count = int(cursor.fetchone()[0])
+    if has_requests:
+        cursor.execute("SELECT COUNT(*) FROM Requests")
+        requests_count = int(cursor.fetchone()[0])
+
     connection.close()
-    return has_users and has_requests
+    return has_users and has_requests and users_count > 0 and requests_count > 0
 
 
 def initialize_database_if_needed():

@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import Card from "../components/Card.jsx"
 import Navbar from "../components/Navbar.jsx"
 import dotsIcon from "../assets/dots.svg"
 import colors from "../colors"
-import { useNavigate } from "react-router-dom";
 
 const status_order = ["Open", "In Progress", "Closed"]
 
@@ -62,6 +61,7 @@ const status_pills = {
 }
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [requests, setRequests] = useState([])
   const [query, setQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("All")
@@ -204,11 +204,15 @@ export default function Dashboard() {
                       {rows.map((request) => {
                         const priority = normalizePriority(request.priority)
                         return (
-                          <tr key={request.id}>
+                          <tr
+                            key={request.id}
+                            onClick={() => navigate(`/request/${request.id}`)}
+                            style={{ cursor: "pointer" }}
+                          >
                             <td style={{...bodyCellStyle, color: colors.textMuted}}>
-                              <Link style={{color: colors.textMain, fontWeight: 600}} to={`/request/${request.id}`}>
+                              <span style={{color: colors.textMain, fontWeight: 600}}>
                                 {request.id}
-                              </Link>
+                              </span>
                             </td>
                             <td style={bodyCellStyle}> {request.title} </td>
                             <td style={mutedCellStyle}> {request.user ?? "--"} </td>

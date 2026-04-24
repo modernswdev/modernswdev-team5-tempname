@@ -11,6 +11,7 @@ export default function RequestDetails() {
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [updateError, setUpdateError] = useState("");
 
   useEffect(() => {
     async function fetchRequest() {
@@ -137,6 +138,35 @@ export default function RequestDetails() {
     };
   };
 
+  const statusOptions = ["Open", "In Progress", "Closed"];
+
+  async function handleStatusUpdate(e) {
+    e.preventDefault();
+    if (!request) return;
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/requests/${id}/status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          new_status: request.status,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update request status.");
+      }
+
+      const data = await response.json();
+      setRequest(data.request);
+    } catch (err) {
+      setUpdateError(err.message || "Failed to update request status.");
+    }
+  }
+
+
+
   return (
     <Card>
       <Navbar />
@@ -249,10 +279,56 @@ export default function RequestDetails() {
                         {request.status ?? "Open"}
                       </span>
                     </div>
+                    <select
+                      value={request.status ?? "Open"}
+                      onChange={(e) =>
+                        setRequest((prev) =>
+                          prev ? { ...prev, status: e.target.value } : prev
+                        )
+                      }
+                      style={{
+                        marginTop: "0.75rem",
+                        width: "100%",
+                        padding: "0.7rem 0.9rem",
+                        borderRadius: "10px",
+                        border: `1px solid ${colors.border}`,
+                        backgroundColor: colors.lgBackground,
+                        color: colors.textMain,
+                        fontSize: "0.9rem",
+                        outline: "none",
+                        boxSizing: "border-box",
+                      }}
+                    >
+                      {statusOptions.map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
                 <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
+                  <button
+                    type="button"
+                    onClick={handleStatusUpdate}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: colors.green,
+                      color: "white",
+                      border: "none",
+                      padding: "0.85rem 1.35rem",
+                      borderRadius: "10px",
+                      cursor:"pointer",
+                      fontWeight: 700,
+                      fontSize: "0.95rem",
+                    }}
+                  >
+                    Save
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => navigate("/home")}
