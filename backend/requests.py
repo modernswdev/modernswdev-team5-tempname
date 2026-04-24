@@ -1,7 +1,8 @@
 import sqlite3
 import csv
+import os
 
-DB_PATH = "database/service_requests.db"
+DB_PATH = os.environ.get("DATABASE_PATH", "database/service_requests.db")
 
 
 def get_connection():
